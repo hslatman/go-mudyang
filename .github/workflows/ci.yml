@@ -25,18 +25,16 @@ jobs:
           go-version: '1.24.3' # TODO: fix matrix
           cache: true
 
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v3
 
       - name: Linting
-        if: matrix.full-tests
-        run: | # TODO: use the GH action instead
-          curl -sL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh |
-              sh -s -- -b $HOME/go/bin v2.1.6
-          $HOME/go/bin/golangci-lint run --timeout=30m \
-                                         --max-issues-per-linter 0 \
-                                         --max-same-issues 0 \
-                                         ./...
+        uses: golangci/golangci-lint-action@4afd733a84b1f43292c63897423277bb7f4313a9 # v8.0.0
+        with:
+          working-directory: .
+          version: latest
+          verify: true
+          args: --config=.golangci.yml
 
       - name: Testing
         continue-on-error: ${{ matrix.go-version == 'tip' }}
