@@ -76,8 +76,8 @@ The [openconfig/ygot/generator](https://github.com/openconfig/ygot/tree/master/g
 It can be used as follows:
 
 ```console
-# run the generate make target
-$ make generate
+# run the generate Mage target
+$ mage generate
 ```
 
 There's a small caveat to running this command, though:

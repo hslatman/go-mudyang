@@ -3,6 +3,7 @@ module github.com/hslatman/go-mudyang
 go 1.24
 
 require (
+	github.com/magefile/mage v1.15.0
 	github.com/openconfig/goyang v1.6.2
 	github.com/openconfig/ygot v0.31.0
 	github.com/spf13/cobra v1.9.1
@@ -28,4 +29,7 @@ require (
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
 
-tool github.com/openconfig/ygot/generator
+tool (
+	github.com/magefile/mage
+	github.com/openconfig/ygot/generator
+)
