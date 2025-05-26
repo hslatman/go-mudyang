@@ -4,8 +4,10 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"os"
 	"regexp"
+	"strings"
 
 	"github.com/magefile/mage/mg"
 	"github.com/magefile/mage/sh"
@@ -20,6 +22,8 @@ var (
 // the ygot generator. The generator name is overridden in the
 // generated code to be more informative.
 func Generate(ctx context.Context) error {
+	mg.Deps(Tools)
+
 	args := []string{
 		"tool",
 		"github.com/openconfig/ygot/generator",
@@ -32,7 +36,7 @@ func Generate(ctx context.Context) error {
 		"yang/ietf-packet-fields@2019-03-04.yang",
 		"yang/ietf-ethertypes@2019-03-04.yang",
 		"yang/ietf-acldns.yang",
-		"yang/ietf-access-control-list@2019-03-04.yang", // NOTE sourced from https://www.yangcatalog.org/all_modules/ietf-access-control-list@2019-03-04.yang
+		"yang/ietf-access-control-list@2019-03-04.yang", // NOTE: sourced from https://www.yangcatalog.org/all_modules/ietf-access-control-list@2019-03-04.yang
 		"yang/ietf-inet-types@2024-10-21.yang",          // NOTE: sourced from https://www.yangcatalog.org/all_modules/ietf-inet-types@2024-10-21.yang
 		"yang/iana-tls-profile@2025-04-18.yang",         // NOTE: sourced from https://www.yangcatalog.org/all_modules/iana-tls-profile@2025-04-18.yang
 		"yang/ietf-acl-tls@2025-04-18.yang",             // NOTE: sourced from https://www.yangcatalog.org/all_modules/ietf-acl-tls@2025-04-18.yang
@@ -50,18 +54,20 @@ func Generate(ctx context.Context) error {
 		return err
 	}
 
-	result := packageRegex.ReplaceAllString(out, "github.com/openconfig/ygot/generator@v0.31.0")
+	modVersion, err := sh.Output("go", "list", "-m", "github.com/openconfig/ygot")
+	if err != nil {
+		return err
+	}
+
+	moduleNameAndVersion := fmt.Sprintf("github.com/openconfig/ygot/generator@%s", strings.Split(modVersion, " ")[1])
+
+	result := packageRegex.ReplaceAllString(out, moduleNameAndVersion)
 
 	return os.WriteFile("mudyang.go", []byte(result), 0644)
 }
 
 // Tools ensures the tools get installed
 func Tools() error {
-	return tidy()
-}
-
-// tidy ensures that go.mod and go.sum are up to date
-func tidy() error {
 	return sh.RunV("go", "mod", "tidy")
 }
 
