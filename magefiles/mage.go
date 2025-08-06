@@ -9,8 +9,11 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/magefile/mage/mg"
+	"github.com/magefile/mage/mg" // TODO: can we depend on these with them only being in go.tools.mod?
 	"github.com/magefile/mage/sh"
+
+	// mage:import
+	_ "github.com/hslatman/magefiles/targets" // shared targets
 )
 
 var (
@@ -70,11 +73,6 @@ func Generate(ctx context.Context) error {
 // Tools ensures the tools get installed
 func Tools() error {
 	return sh.RunV("go", "mod", "tidy", "-modfile=go.tools.mod")
-}
-
-// Tidy ensures the dependencies are available
-func Tidy() error {
-	return sh.RunV("go", "mod", "tidy")
 }
 
 // Lint runs the linter
