@@ -26,6 +26,7 @@ func Generate(ctx context.Context) error {
 
 	args := []string{
 		"tool",
+		"-modfile=go.tools.mod",
 		"github.com/openconfig/ygot/generator",
 		"-path=yang",
 		"-output_file=-",
@@ -68,12 +69,17 @@ func Generate(ctx context.Context) error {
 
 // Tools ensures the tools get installed
 func Tools() error {
+	return sh.RunV("go", "mod", "tidy", "-modfile=go.tools.mod")
+}
+
+// Tidy ensures the dependencies are available
+func Tidy() error {
 	return sh.RunV("go", "mod", "tidy")
 }
 
 // Lint runs the linter
 func Lint(ctx context.Context) error {
 	mg.Deps(Tools)
-	args := []string{"run", "--config", ".golangci.yml"}
-	return sh.RunV("golangci-lint", args...)
+	args := []string{"tool", "-modfile=go.tools.mod", "github.com/golangci/golangci-lint/v2/cmd/golangci-lint", "run", "--config", ".golangci.yml"}
+	return sh.RunV("go", args...)
 }
