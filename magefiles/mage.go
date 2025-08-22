@@ -13,7 +13,9 @@ import (
 	"github.com/magefile/mage/sh"
 
 	// mage:import
-	_ "github.com/hslatman/magefiles/targets" // shared targets
+	"github.com/hslatman/magefiles/targets" // shared targets
+
+	"github.com/hslatman/magefiles/release"
 )
 
 var (
@@ -25,7 +27,7 @@ var (
 // the ygot generator. The generator name is overridden in the
 // generated code to be more informative.
 func Generate(ctx context.Context) error {
-	mg.Deps(Tools)
+	mg.Deps(targets.Tools)
 
 	args := []string{
 		"tool",
@@ -70,14 +72,15 @@ func Generate(ctx context.Context) error {
 	return os.WriteFile("mudyang.go", []byte(result), 0644)
 }
 
-// Tools ensures the tools get installed
-func Tools() error {
-	return sh.RunV("go", "mod", "tidy", "-modfile=./.tools/go.mod")
-}
-
 // Lint runs the linter
 func Lint(ctx context.Context) error {
-	mg.Deps(Tools)
+	mg.Deps(targets.Tools)
 	args := []string{"tool", "-modfile=./.tools/go.mod", "github.com/golangci/golangci-lint/v2/cmd/golangci-lint", "run", "--config", ".golangci.yml"}
 	return sh.RunV("go", args...)
+}
+
+func Check(ctx context.Context) error {
+	mg.Deps(release.Tools)
+
+	return release.Check()
 }
