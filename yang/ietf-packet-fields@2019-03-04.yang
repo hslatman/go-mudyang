@@ -38,7 +38,6 @@ module ietf-packet-fields {
      Editor: Dana Blair
              dana@blairhome.com";
 
-
   description
     "This YANG module defines groupings that are used by
      the ietf-access-control-list YANG module.  Their usage

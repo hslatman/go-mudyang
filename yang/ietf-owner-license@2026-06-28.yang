@@ -1,12 +1,12 @@
-module ietf-ol {
+module ietf-owner-license {
   yang-version 1.1;
-  namespace "urn:ietf:params:xml:ns:yang:ietf-ol";
+  namespace "urn:ietf:params:xml:ns:yang:ietf-owner-license";
   prefix ol;
 
   import ietf-inet-types {
     prefix inet;
     reference
-      "RFC 6991: Common Yang Data Types, Section 4";
+      "RFC 9911: Common Yang Data Types, Section 4";
   }
   import ietf-mud {
     prefix ietf-mud;
@@ -15,17 +15,22 @@ module ietf-ol {
   }
 
   organization
-    "IETF OPSAWG (Ops Area) Working Group";
+    "IETF IOTOPS (IoT Operations) Working Group";
   contact
-    "WG
-     Web: http://tools.ietf.org/wg/opsawg/
-     WG List: opsawg@ietf.org
-     Author: Eliot Lear lear@cisco.com
-     Author: Carsten Bormann <cabo@tzi.org>";
-  description
-    "This YANG module to indicate ownership and licensing.
+    "WG Web:   <http://datatracker.ietf.org/wg/iotops/>
+     WG List:  <mailto:iotops@ietf.org>
 
-     Copyright (c) 2024 IETF Trust and the persons identified as
+     Editor:   Eliot Lear
+               <mailto:lear@cisco.com>
+
+     Editor:   Carsten Bormann
+               <mailto:cabo@tzi.org>";
+  description
+    "This YANG module defines a grouping for expressing ownership
+     and licensing information for YANG-described static objects,
+     and augments the MUD model (RFC 8520) with that grouping.
+
+     Copyright (c) 2026 IETF Trust and the persons identified as
      authors of the code.  All rights reserved.
 
      Redistribution and use in source and binary forms, with or
@@ -39,45 +44,49 @@ module ietf-ol {
      (https://www.rfc-editor.org/info/rfcXXXX);
      see the RFC itself for full legal notices.";
 
-  revision 2024-04-26 {
+  revision 2026-06-28 {
     description
       "Initial revision.";
     reference
       "RFC XXXX: Ownership and Licensing Statements in YANG";
   }
 
-  grouping owner-license-grouping {
+  grouping owner-license {
     description
-      "A grouping expression ownership and license information";
-    container ol {
+      "A grouping expressing ownership and license information.";
+    container owner-license {
       description
-        "container relating to ownership and licensing.";
+        "Container relating to ownership and licensing.";
       list license {
         key "owner-name";
         description
-          "list of licenses that may be applied.";
+          "List of licenses that may be applied.";
         leaf owner-name {
           type string {
             length "1..128";
           }
           description
-            "name of the owner";
+            "Name of the owner.";
         }
         choice license-type {
+          mandatory true;
           description
             "Either choose a standard license type or point
              to one of your own.";
-          case spdx-lt {
-            leaf-list spdx-tags {
+          case spdx {
+            leaf-list spdx-tag {
               type string;
+              min-elements 1;
               description
-                "SPDX License Identifier, as indicated at
-                 https://spdx.org/licenses/";
+                "SPDX License Identifier.";
+              reference
+                "https://spdx.org/licenses/: SPDX License List";
             }
           }
           case url {
             leaf-list license-info {
               type inet:uri;
+              min-elements 1;
               description
                 "A URL pointing to licensing information.";
             }
@@ -89,7 +98,7 @@ module ietf-ol {
 
   augment "/ietf-mud:mud" {
     description
-      "Add extension for Ownership and licensing.";
-    uses owner-license-grouping;
+      "Add extension for ownership and licensing.";
+    uses owner-license;
   }
 }

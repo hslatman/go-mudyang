@@ -4,11 +4,11 @@
       "extensions": [
         "ol"
       ],
-      "ietf-ol:ol": {
+      "ietf-owner-license:owner-license": {
         "license": [
           {
             "owner-name": "Copyright 2024 Frobinator, Inc",
-            "spdx-tags": [
+            "spdx-tag": [
               "0BSD"
             ]
           }

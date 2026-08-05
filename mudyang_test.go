@@ -52,8 +52,8 @@ func TestMudfileValidate(t *testing.T) {
 			},
 		},
 		{
-			name:     "ok/ol",
-			filepath: "./examples/ol/olExample.json",
+			name:     "ok/owner-license",
+			filepath: "./examples/owner-license/ownerLicenseExample.json",
 			args: args{
 				opts: []ygot.ValidationOption{leafRefOptions},
 			},

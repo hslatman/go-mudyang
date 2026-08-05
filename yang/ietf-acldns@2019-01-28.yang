@@ -43,7 +43,6 @@ module ietf-acldns {
   revision 2019-01-28 {
     description
       "Base version of dnsname extension of the ACL model.";
-
     reference
       "RFC 8520: Manufacturer Usage Description
        Specification";
@@ -62,7 +61,6 @@ module ietf-acldns {
       description
         "domain name to be matched against.";
     }
-
   }
 
   augment "/acl:acls/acl:acl/acl:aces/acl:ace/acl:matches"
