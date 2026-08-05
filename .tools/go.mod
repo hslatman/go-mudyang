@@ -3,7 +3,7 @@ module github.com/hslatman/go-mudyang
 go 1.24.0
 
 require (
-	github.com/hslatman/magefiles v0.0.0-20250806225733-cd96ccbefcff
+	github.com/hslatman/magefiles v0.0.0-20250822205152-fbb391e5f9ed
 	github.com/magefile/mage v1.15.0
 	github.com/openconfig/goyang v1.6.3
 	github.com/openconfig/ygot v0.33.0
